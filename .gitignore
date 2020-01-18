@@ -1,0 +1,8 @@
+## NPM
+node_modules/
+
+## Typescript
+build/**/*.js
+
+## Prop-Types-CSS
+dist/
