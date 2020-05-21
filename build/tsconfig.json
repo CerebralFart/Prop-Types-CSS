@@ -1,7 +1,8 @@
 {
-  "compilerOptions": {
-	"target": "es2019",
-	"module": "es6",
-	"allowSyntheticDefaultImports": true
-  }
+	"compilerOptions": {
+		"target": "es2019",
+		"module": "es6",
+		"allowSyntheticDefaultImports": true,
+		"sourceMap": true
+	}
 }
