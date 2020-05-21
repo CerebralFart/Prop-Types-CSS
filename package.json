@@ -1,7 +1,28 @@
 {
-  "devDependencies": {
-    "@types/node": "^12.12.17",
-    "esm": "^3.2.25",
-    "typescript": "^3.7.3"
-  }
+	"name": "prop-types-css",
+	"version": "1.0.0-rc1",
+	"description": "Runtime type checking for css props.",
+	"keywords": [
+		"prop-types",
+		"type-checking",
+		"validation",
+		"validator",
+		"css"
+	],
+	"license": "MIT",
+	"author": {
+		"name": "Sven Mol",
+		"email": "sven@taupeweb.nl"
+	},
+	"main": "dist/index.js",
+	"devDependencies": {
+		"@types/node": "^12.12.17",
+		"esm": "^3.2.25",
+		"typescript": "^3.7.3"
+	},
+	"scripts": {
+		"compiler:build": "tsc -p ./build/",
+		"compiler:watch": "tsc --watch -p ./build/",
+		"grammar:build": "node -r esm build/index.js"
+	}
 }
