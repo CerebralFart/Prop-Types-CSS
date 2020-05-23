@@ -1,6 +1,8 @@
 import Error from "./Error";
 import Rule from "./rules/Rule";
 import TabIndentedRule from "./rules/TabIndentedRule";
+import RegexPrefixRule from "./rules/RegexPrefixRule";
+import RegexSuffixRule from "./rules/RegexSuffixRule";
 
 class Validator {
 	static validate(grammar: string): boolean {
@@ -9,6 +11,8 @@ class Validator {
 	}
 
 	static rules: Rule[] = [
+		new RegexPrefixRule(),
+		new RegexSuffixRule(),
 		new TabIndentedRule()
 	];
 
