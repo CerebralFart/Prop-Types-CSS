@@ -14,6 +14,9 @@
 		"name": "Sven Mol",
 		"email": "sven@taupeweb.nl"
 	},
+	"repository": {
+		"url": "https://github.com/CerebralFart/Prop-Types-CSS"
+	},
 	"main": "dist/index.js",
 	"devDependencies": {
 		"@types/node": "^12.12.17",
