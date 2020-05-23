@@ -1,8 +1,10 @@
 import Definition from "./Definition";
+import RegexDefinition from "./RegexDefinition";
 import LiteralDefinition from "./LiteralDefinition";
 
 const definitions = [
 	LiteralDefinition,
+	RegexDefinition,
 ];
 
 const buildDefinition = (value: string): Definition => {
