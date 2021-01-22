@@ -29,7 +29,8 @@
 	"scripts": {
 		"compiler:build": "tsc",
 		"compiler:watch": "tsc --watch",
-		"grammar:build": "node -r esm build/index.js"
+		"grammar:build": "node -r esm build/index.js",
+		"grammar:test": "ava test/grammar.js"
 	},
 	"dependencies": {}
 }
