@@ -6,10 +6,12 @@ export default class Parser {
 	static grammarDir = `${__dirname}/../../grammar/`;
 
 	public static parseAll(): Tree {
-		return Tree.merge(
+		const tree = Tree.merge(
 			...fs.readdirSync(Parser.grammarDir)
 				.map(Parser.parseFile),
 		);
+		tree.iterate(subtree => subtree.leaves.forEach(leaf => leaf.updateContext(tree)));
+		return tree;
 	}
 
 	public static parseFile(file: string): Tree {
