@@ -5,6 +5,8 @@ yarn.lock
 ## Typescript
 build/**/*.js
 build/**/*.js.map
+test/**/*.js
+test/**/*.js.map
 
 ## Prop-Types-CSS
 dist/
