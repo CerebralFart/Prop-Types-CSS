@@ -26,8 +26,8 @@
 		"yargs": "^15.4.1"
 	},
 	"scripts": {
-		"compiler:build": "tsc -p ./build/",
-		"compiler:watch": "tsc --watch -p ./build/",
+		"compiler:build": "tsc",
+		"compiler:watch": "tsc --watch",
 		"grammar:build": "node -r esm build/index.js"
 	},
 	"dependencies": {}
