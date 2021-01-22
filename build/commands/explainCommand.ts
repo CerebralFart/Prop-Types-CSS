@@ -26,7 +26,11 @@ export default class ExplainCommand implements Command {
 
 		tree.iterate(tree => {
 			if (tree.name === null) return;
-			console.log(`${this.indent(tree.fullname.length - 1)}${(tree.name.substr(tree.isCascading ? 0 : 1) + ":").padEnd(13, " ")}${tree.name.startsWith("/") ? "non-cascading" : "cascading"} group`);
+			const flags = [
+				(tree.name.startsWith("/") ? "non-cascading" : "cascading") + " group",
+				...tree.flags,
+			];
+			console.log(`${this.indent(tree.fullname.length - 1)}${(tree.name.substr(tree.isCascading ? 0 : 1) + ":").padEnd(13, " ")}${flags.join(", ")}`);
 			tree.leaves.forEach(leaf => {
 				console.log(`${this.indent(tree.fullname.length)}${leaf.toString()}`);
 			});

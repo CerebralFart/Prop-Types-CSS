@@ -50,7 +50,11 @@ export default class Tree {
 			flagNames.push(...tree._flags);
 			tree = tree.parent;
 		}
-		return flagNames.map(flag => Tree.flags[flag]);
+		return flagNames;
+	}
+
+	get flagFns(){
+		return this.flags.map(flag => Tree.flags[flag]);
 	}
 
 	get isCascading() {
