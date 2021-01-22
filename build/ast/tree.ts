@@ -3,6 +3,10 @@ import makeDefinition from "../definitions/index";
 import BranchRegister from "./branchRegister";
 
 export default class Tree {
+	private static flags = {
+		"caseInsensitive": varName => `${varName} = ${varName}.toLowerCase()`,
+	};
+
 	public static merge(...trees: Tree[]) {
 		const root = Tree.makeRoot();
 		for (let tree of trees) {
@@ -16,15 +20,19 @@ export default class Tree {
 		return new Tree(null, null);
 	}
 
-	readonly name: string | null;
 	readonly parent: Tree | null;
-	private _branches: { [key: string]: Tree } = {};
+	private _name: string | null;
 	private _branches: BranchRegister = new BranchRegister();
 	private _leaves: Definition[] = [];
+	private _flags: string[] = [];
 
 	private constructor(name: string, parent: Tree) {
-		this.name = name;
+		this._name = name;
 		this.parent = parent;
+	}
+
+	get name() {
+		return this._name;
 	}
 
 	get branches() {
@@ -33,6 +41,16 @@ export default class Tree {
 
 	get leaves() {
 		return [...this._leaves];
+	}
+
+	get flags() {
+		const flagNames = [];
+		let tree: Tree = this;
+		while (tree != null) {
+			flagNames.push(...tree._flags);
+			tree = tree.parent;
+		}
+		return flagNames.map(flag => Tree.flags[flag]);
 	}
 
 	get isCascading() {
@@ -79,6 +97,8 @@ export default class Tree {
 		this.iterate((tree: Tree) => {
 			if (tree.isTerminus) {
 				tree.makeLeaf();
+			} else {
+				tree.initializeFlags();
 			}
 		});
 	}
@@ -110,5 +130,19 @@ export default class Tree {
 		this.parent._branches.remove(this);
 	}
 
+	private initializeFlags(): void {
+		if (this._name === null) return; // Trees without name cannot have flags
+
+		const match = this._name.match(/(.*)\[([a-zA-Z,]+)]/);
+		if (match === null) return; // This tree doesn't have flags, abort parsing
+
+		this._name = match[1];
+		const flags = match[2].split(",");
+		flags.forEach(flag => {
+			if (!(flag in Tree.flags)) {
+				throw new Error(`Flag '${flag}' is invalid`);
+			}
+		});
+		this._flags = flags;
 	}
 }
