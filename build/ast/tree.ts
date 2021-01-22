@@ -1,11 +1,12 @@
 import Definition from "../definitions/definition";
 import makeDefinition from "../definitions/index";
+import BranchRegister from "./branchRegister";
 
 export default class Tree {
 	public static merge(...trees: Tree[]) {
 		const root = Tree.makeRoot();
 		for (let tree of trees) {
-			root._branches = {...root._branches, ...tree._branches};
+			root._branches = BranchRegister.merge(root._branches, tree._branches);
 			root._leaves.push(...tree._leaves);
 		}
 		return root;
@@ -18,6 +19,7 @@ export default class Tree {
 	readonly name: string | null;
 	readonly parent: Tree | null;
 	private _branches: { [key: string]: Tree } = {};
+	private _branches: BranchRegister = new BranchRegister();
 	private _leaves: Definition[] = [];
 
 	private constructor(name: string, parent: Tree) {
@@ -26,7 +28,7 @@ export default class Tree {
 	}
 
 	get branches() {
-		return Object.values(this._branches);
+		return this._branches.items();
 	}
 
 	get leaves() {
@@ -61,10 +63,7 @@ export default class Tree {
 		if (typeof path === "string") path = path.split(".");
 		const step = path.shift();
 		if (step) {
-			let section = this._branches[step];
-			if (!section) section = this._branches["/" + step];
-
-			return section.get(path);
+			return this._branches.get(step).get(path);
 		} else {
 			return this;
 		}
@@ -72,7 +71,7 @@ export default class Tree {
 
 	public growBranch(name: string): Tree {
 		const branch = new Tree(name, this);
-		this._branches[name] = branch;
+		this._branches.add(branch);
 		return branch;
 	}
 
@@ -101,23 +100,15 @@ export default class Tree {
 
 	public iterate(iterator: (tree: Tree) => void, selfLeading: boolean = false) {
 		if (selfLeading) iterator(this);
-		for (let name in this._branches) {
-			let branch = this._branches[name];
-			branch.iterate(iterator, selfLeading);
-		}
+		this._branches.iterate(branch => branch.iterate(iterator, selfLeading));
 		if (!selfLeading) iterator(this);
-	}
-
-	private replaceBranch(branchName: string, definition: Definition) {
-		delete this._branches[branchName];
-		this._leaves.push(definition);
 	}
 
 	private makeLeaf(): void {
 		if (!this.isTerminus) throw new Error(`Cannot grow a leaf on a non-terminus branch (${this.fullname.join(" - ")})`);
-		this.parent.replaceBranch(
-			this.name,
-			makeDefinition(this.name, this.root),
-		);
+		this.parent._leaves.push(makeDefinition(this.name, this.root));
+		this.parent._branches.remove(this);
+	}
+
 	}
 }
