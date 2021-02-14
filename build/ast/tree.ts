@@ -1,12 +1,9 @@
 import Definition from "../definitions/definition";
 import makeDefinition from "../definitions/index";
 import BranchRegister from "./branchRegister";
+import {Flag, flags} from "./flag";
 
 export default class Tree {
-	private static flags = {
-		"caseInsensitive": varName => `${varName} = ${varName}.toLowerCase()`,
-	};
-
 	public static merge(...trees: Tree[]) {
 		const root = Tree.makeRoot();
 		for (let tree of trees) {
@@ -43,7 +40,7 @@ export default class Tree {
 		return [...this._leaves];
 	}
 
-	get flags() {
+	get flagNames() {
 		const flagNames = [];
 		let tree: Tree = this;
 		while (tree != null) {
@@ -53,8 +50,8 @@ export default class Tree {
 		return flagNames;
 	}
 
-	get flagFns(){
-		return this.flags.map(flag => Tree.flags[flag]);
+	get flags(): Flag[] {
+		return this.flagNames.map(flag => flags[flag]);
 	}
 
 	get isCascading() {
@@ -143,7 +140,7 @@ export default class Tree {
 		this._name = match[1];
 		const flags = match[2].split(",");
 		flags.forEach(flag => {
-			if (!(flag in Tree.flags)) {
+			if (!(flag in flags)) {
 				throw new Error(`Flag '${flag}' is invalid`);
 			}
 		});

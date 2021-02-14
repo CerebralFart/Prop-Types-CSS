@@ -12,7 +12,9 @@ export default class IsFnEmitter extends Emitter {
 		tree.iterate(subtree => {
 			if (subtree.name === null) return;
 			buffer.append(`const ${subtree.isFnName} = value => {\n`);
-			subtree.flagFns.forEach(flag => buffer.indent().append(flag("value")).newline());
+			subtree.flags
+				.filter(flag => flag.transform)
+				.forEach(flag => buffer.indent().append(flag.transform("value")).newline());
 
 			let branchFns = subtree.branches
 				.filter(branch => branch.isCascading)
