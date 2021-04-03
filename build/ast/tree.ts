@@ -138,12 +138,12 @@ export default class Tree {
 		if (match === null) return; // This tree doesn't have flags, abort parsing
 
 		this._name = match[1];
-		const flags = match[2].split(",");
-		flags.forEach(flag => {
+		const ownFlags = match[2].split(",");
+		ownFlags.forEach(flag => {
 			if (!(flag in flags)) {
 				throw new Error(`Flag '${flag}' is invalid`);
 			}
 		});
-		this._flags = flags;
+		this._flags = ownFlags;
 	}
 }
